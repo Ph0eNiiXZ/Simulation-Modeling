@@ -1,44 +1,34 @@
 # **Rollercoaster Queueing Simulation**
-## **Process Overview**
-- people will first be checked off their corresponding type of queue to enter 
-- people enter the corresponding queue
-- people wait for the ride
-- special pass gets prioritized
-- people enter ride until capacity is filled
-- ride starts
-- ride ends and people exits the system
+## **Process & Overview**
+- ride opens
+- people may start entering the queue
+- the ride starts operating once there is enough people in the queue to fill in a ride's capacity
+- if there is more than one vehicle, the next vehicle will take 10 seconds to dock the station after the preceding vehicle was released
+- when a vehicle is stationed, if there are riders on the vehicle they shall exit the system and the people enqueued shall enter the vehicle
+- once a vehicle finishes the ride according to the given ridetime, it checks if station is empty; if it is empty, the vehicle will dock instantly. if it is not the vehicle will wait at the waiting station until it is empty again
+- and the processes repeats
 
-## **Probability distribution tables**
+## **Probability Distribution Tables**
 
 |Time between arrivals (seconds) |   Probability|
 |--------------------------------|--------------|
-|                            5   |   0.5        |
-|                            10  |   0.2        |
-|                            15  |   0.1        |
-|                            20  |   0.075      |
-|                            25  |   0.075      |
-|                            25+ |   0.05       |
+|                            10  |   0.35       |
+|                            20  |   0.25       |
+|                            30  |   0.15       |
+|                            40  |   0.15       |
+|                            50  |   0.075      |
+|                            60  |   0.025      |
+
+> Let the number of people that will arrive along the time between arrivals be generated and randomized using  **Poisson Distribution** (lambda = 4)
 
 |Ride service time (seconds)|Probability|
 |---|---|
-|180|0.6|
-|190|0.2|
-|200|0.1|
-|210|0.05|
-|220|0.025|
-|220+|0.025|
+|30|0.6|
+|35|0.2|
+|40|0.1|
+|45|0.05|
+|50|0.025|
+|55|0.015|
+|60|0.01|
 
-> Note that **ride service time** includes the **actual ride time** and the  **service time** for when finished riders exits and new riders enters the vehicle
-
-## **To do**
-
-1. generate arrival time with a uniform distribution
-2. random 1-10 and distributed along the corresponding probability
-3. using normal distribution, generate and randomize the number of people (between 1-10) that will enter the system correspondingly at a point of time
-
-
-
-
-## **What to find**
-- min-max-mean of the queue length
-- distribution of queue length throughout a selected period of time 
+> Note that the **ride service time** excludes the **actual ride time**. It is for the  **service time** for when finished riders **exits** and new riders **enters** the vehicle at the station.
