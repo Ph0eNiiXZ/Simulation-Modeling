@@ -3,10 +3,8 @@
 - ride opens
 - people may start entering the queue
 - the ride starts operating once there is enough people in the queue to fill in a ride's capacity
-- if there is more than one vehicle, the next vehicle will take 10 seconds to dock the station after the preceding vehicle was released
 - when a vehicle is stationed, if there are riders on the vehicle they shall exit the system and the people enqueued shall enter the vehicle
-- once a vehicle finishes the ride according to the given ridetime, it checks if station is empty; if it is empty, the vehicle will dock instantly. if it is not the vehicle will wait at the waiting station until it is empty again
-- and the processes repeats
+- the processes repeats
 
 ## **Probability Distribution Tables**
 
