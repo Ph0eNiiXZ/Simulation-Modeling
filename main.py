@@ -19,7 +19,8 @@ ServiceTimeProb = [0.6,0.2,0.1,0.05,0.025,0.015,0.01]
 Global Settings
 """
 queued = []
-on_ride = []
+timestampsA = []
+timestampsB = []
 total_arrival = 0
 total_depart = 0
 total_system = 0
@@ -50,7 +51,7 @@ class RollerCoaster:
 Operations
 """
 
-current_queue = 0
+# current_queue = 0
 
 def enqueue(ride: RollerCoaster, env: simpy.Environment, servers: simpy.Resource):
     while True:
@@ -58,37 +59,72 @@ def enqueue(ride: RollerCoaster, env: simpy.Environment, servers: simpy.Resource
         people_count = 0
         people_count = generate_poisson()
         print('%d rider(s) arrives at %d' % (people_count,env.now))
-        global total_arrival, total_system, current_queue
-        current_queue += people_count
+        timestampsA.append(env.now[0])
+        print("!!! Arrival Time Log: ",timestampsA)
+        global total_arrival, total_system, queued
+        # current_queue += people_count
+        queued.append(people_count)
+        print("!!! Queue Log:",queued)
         total_arrival = total_arrival + people_count
         print("- total arrivals:     ",total_arrival)
         total_system = total_system + people_count
         print("- total in the system:",total_system)
-        queued.append(people_count)
-        print("!!! Queue Log:",queued)
-        if current_queue > ride.ridecapacity:
-            env.process(rideoperate(ride, env, servers))
-            current_queue -= ride.ridecapacity
+        # if current_queue > ride.ridecapacity:
+        env.process(rideoperate(ride, env, servers))
+            # current_queue -= ride.ridecapacity
 
 def rideoperate(ride: RollerCoaster, env: simpy.Environment, servers: simpy.Resource):
     with servers.request() as req:
         yield req
+        global total_depart, total_system
+        out = get_total_seat(ride.ridecapacity)
+        total_depart += out
         print("+ Ride starts and is released from the station")
+    
+        print("- total depart: ",total_depart)
+        total_system -= out
+        print("- total in the system:",total_system)
         yield env.timeout(ride.ridetime_seconds + np.random.choice(ServiceTime, 1, ServiceTimeProb))
-        print("- Ride ends and docks at the station at %d" % env.now)
+        timestampsB.append(env.now[0])
+        print("!!! Departure Time Log: ",timestampsB)
+        print("+ Ride ends and docks at the station at %d" % env.now)
         print("...Current riders departs from the vehicle...")
+
+def get_total_seat(ride_capacity: int):
+    global queued
+    total_seats = 0
+    idx = 0
+    for i in range(len(queued)):
+        idx += 1
+        if total_seats + queued[i] > ride_capacity:
+            queued[i] -= ride_capacity - total_seats
+            total_seats = ride_capacity
+            break
+        total_seats += queued[i]
+    queued = queued[idx:]
+    return total_seats
+
+def get_time_sys(arr, dep):
+    for a, d in zip(arr, dep):
+        yield d - a
+
 
 """
 Simulation
 """
 env = simpy.Environment()
 
-ride1 = RollerCoaster(env, "Phoenix", 90, 10, 2)
+ride1 = RollerCoaster(env, "Phoenix", 90, 12, 2)
 
 servers = simpy.Resource(env, capacity=ride1.vehiclecount)
 
 env.process(enqueue(ride1, env, servers))
 
-# env.process(rideoperate(ride1,env,servers))
+env.run(until=36000)
 
-env.run(until=180)
+sys_time = list(get_time_sys(timestampsA, timestampsB))
+expected_sys_time = sum(sys_time) / len(sys_time)
+
+print("----------------------------------------")
+print("The expected system time: ", expected_sys_time,"seconds")
+print("----------------------------------------")
