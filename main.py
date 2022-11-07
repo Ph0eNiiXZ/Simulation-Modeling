@@ -50,25 +50,30 @@ class RollerCoaster:
 Operations
 """
 
-def enqueue(self, env, servers):
+current_queue = 0
+
+def enqueue(ride: RollerCoaster, env: simpy.Environment, servers: simpy.Resource):
     while True:
         yield env.timeout(np.random.choice(IAT, 1, IATprob))
         people_count = 0
         people_count = generate_poisson()
         print('%d rider(s) arrives at %d' % (people_count,env.now))
-        global total_arrival, total_system
+        global total_arrival, total_system, current_queue
+        current_queue += people_count
         total_arrival = total_arrival + people_count
         print("- total arrivals:     ",total_arrival)
         total_system = total_system + people_count
         print("- total in the system:",total_system)
         queued.append(people_count)
-        env.process(rideoperate(self, env, servers))
+        if current_queue > ride.ridecapacity:
+            env.process(rideoperate(ride, env, servers))
+            current_queue -= ride.ridecapacity
 
-def rideoperate(self, env, servers):
+def rideoperate(ride: RollerCoaster, env: simpy.Environment, servers: simpy.Resource):
     with servers.request() as req:
         yield req
         print("+ Ride starts and is released from the station")
-        yield env.timeout(self.ridetime_seconds + np.random.choice(ServiceTime, 1, ServiceTimeProb))
+        yield env.timeout(ride.ridetime_seconds + np.random.choice(ServiceTime, 1, ServiceTimeProb))
         print("- Ride ends and docks at the station at %d" % env.now)
         print("...Current riders departs from the vehicle...")
 
@@ -83,6 +88,6 @@ servers = simpy.Resource(env, capacity=ride1.vehiclecount)
 
 env.process(enqueue(ride1, env, servers))
 
-env.process(rideoperate(ride1,env,servers))
+# env.process(rideoperate(ride1,env,servers))
 
 env.run(until=180)
