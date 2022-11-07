@@ -89,4 +89,6 @@ servers = simpy.Resource(env, capacity=ride1.vehiclecount)
 
 env.process(enqueue(ride1, env, servers))
 
+# env.process(rideoperate(ride1,env,servers))
+
 env.run(until=180)
