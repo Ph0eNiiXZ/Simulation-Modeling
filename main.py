@@ -24,13 +24,12 @@ timestampsB = []
 total_arrival = 0
 total_depart = 0
 total_system = 0
-docking_time = 10
 
 """
 Global Poisson Generator
 """
 def generate_poisson():
-    return np.random.poisson(lam=4)
+    return np.random.poisson(lam=5)
 
 """
 Rollercoaster Informations
@@ -114,13 +113,13 @@ Simulation
 """
 env = simpy.Environment()
 
-ride1 = RollerCoaster(env, "Phoenix", 90, 12, 2)
+ride1 = RollerCoaster(env, "Phoenix", 180, 12, 8)
 
 servers = simpy.Resource(env, capacity=ride1.vehiclecount)
 
 env.process(enqueue(ride1, env, servers))
 
-env.run(until=36000)
+env.run(until=6000)
 
 sys_time = list(get_time_sys(timestampsA, timestampsB))
 expected_sys_time = sum(sys_time) / len(sys_time)
