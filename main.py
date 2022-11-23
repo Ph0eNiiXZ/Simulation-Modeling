@@ -50,8 +50,6 @@ class RollerCoaster:
 Operations
 """
 
-# current_queue = 0
-
 def enqueue(ride: RollerCoaster, env: simpy.Environment, servers: simpy.Resource):
     while True:
         yield env.timeout(np.random.choice(IAT, 1, IATprob))
@@ -61,16 +59,13 @@ def enqueue(ride: RollerCoaster, env: simpy.Environment, servers: simpy.Resource
         timestampsA.append(env.now[0])
         print("!!! Arrival Time Log: ",timestampsA)
         global total_arrival, total_system, queued
-        # current_queue += people_count
         queued.append(people_count)
         print("!!! Queue Log:",queued)
         total_arrival = total_arrival + people_count
         print("- total arrivals:     ",total_arrival)
         total_system = total_system + people_count
         print("- total in the system:",total_system)
-        # if current_queue > ride.ridecapacity:
         env.process(rideoperate(ride, env, servers))
-            # current_queue -= ride.ridecapacity
 
 def rideoperate(ride: RollerCoaster, env: simpy.Environment, servers: simpy.Resource):
     with servers.request() as req:
