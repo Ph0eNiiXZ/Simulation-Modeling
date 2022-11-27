@@ -1,4 +1,5 @@
 # **Rollercoaster Queueing Simulation**
+A project for the simulation modeling course, Industrial Mathematics and Data Science, Mahidol University
 ## **Process & Overview**
 - ride opens
 - people may start entering the queue
