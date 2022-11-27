@@ -44,7 +44,7 @@ class RollerCoaster:
         self.vehiclecount = vehiclecount
     
     def __str__(self):
-        return f"The ride,'{self.name}', has {self.ridetime} minutes riding time,{self.ridecapacity} seats, and {self.vehiclecount} vehicles."
+        return f"The ride,'{self.name}', has {self.ridetime} minutes riding time, {self.ridecapacity} seats, and {self.vehiclecount} vehicles."
 
 """
 Operations
@@ -108,17 +108,18 @@ Simulation
 """
 env = simpy.Environment()
 
-ride1 = RollerCoaster(env, "Phoenix", 180, 12, 8)
+ride1 = RollerCoaster(env, "Mark1", 90, 12, 2)
 
 servers = simpy.Resource(env, capacity=ride1.vehiclecount)
 
 env.process(enqueue(ride1, env, servers))
 
-env.run(until=6000)
+env.run(until=600)
 
 sys_time = list(get_time_sys(timestampsA, timestampsB))
 expected_sys_time = sum(sys_time) / len(sys_time)
 
 print("----------------------------------------")
+print(ride1)
 print("The expected system time: ", expected_sys_time,"seconds")
 print("----------------------------------------")
