@@ -1,11 +1,23 @@
-# **Rollercoaster Queueing Simulation**
-A project for the simulation modeling course, Industrial Mathematics and Data Science, Mahidol University
-## **Process & Overview**
-- ride opens
-- people may start entering the queue
-- the ride starts operating once there is enough people in the queue to fill in a ride's capacity
-- when a vehicle is stationed, if there are riders on the vehicle they shall exit the system and the people enqueued shall enter the vehicle
-- the processes repeats
+# Project Title: Roller Coaster Queue Simulation
+
+## Introduction: 
+Roller coasters are a popular attraction at amusement parks, but waiting in line can often take up a significant amount of time for visitors. In this project, we aim to simulate the waiting time in the queue for a roller coaster ride using various parameters and probability distributions. 
+
+## Objective:
+The objective of this project is to determine the expected waiting time in the queue for a roller coaster ride using different configurations of parameters such as number of riders, ride capacity, and rider arrival rate. This will be achieved through the use of simulation and probability distributions such as Poisson and exponential. 
+
+## Methods:
+- The simulation will be created using programming tools such as Python, R or MATLAB
+- The number of riders in the queue, ride capacity, and rider arrival rate will be defined as input parameters.
+- Poisson and exponential distributions will be used to model the rider arrival rate and waiting time in the queue. 
+- The simulation will be run multiple times with different configurations of parameters to find the expected waiting time in the queue for each scenario.
+
+## Expected Outcome:
+The expected outcome of this project is to find the expected waiting time in the queue for a roller coaster ride using different configurations of parameters such as number of riders, ride capacity, and rider arrival rate. The results of this project will provide valuable insights into how different factors affect the waiting time in queue and can be used to improve the experience of roller coaster riders by optimizing the queueing system.
+
+## Conclusion:
+In conclusion, this project will provide an opportunity to explore the use of simulation and probability distributions in the analysis of a real-world problem. The results of this project will provide insights into the expected waiting time in the queue for a roller coaster ride and can be used to improve the rider experience at amusement parks.
+
 
 ## **Probability Distribution Tables**
 
